@@ -1,7 +1,11 @@
 import React from "react"
+import { Link, useNavigate } from "react-router-dom"
 import { Formik } from "formik"
+import axios from "axios"
 
 const LoginPage = () => {
+	const navigate = useNavigate()
+
 	return (
 		<div className="hero min-h-[80vh] bg-base-200">
 			<div className="hero-content flex-col lg:flex-row-reverse">
@@ -24,11 +28,26 @@ const LoginPage = () => {
 									errors.password = "Password cannot be empty"
 								return errors
 							}}
-							onSubmit={(values, { setSubmitting }) => {
-								setTimeout(() => {
-									alert(JSON.stringify(values, null, 2))
+							onSubmit={async (values, { setSubmitting }) => {
+								try {
+									const { data } = await axios.post(
+										"/api/v1/users/login",
+										values
+									)
+									localStorage.setItem(
+										"user",
+										JSON.stringify({
+											...data,
+											password: "",
+										})
+									)
 									setSubmitting(false)
-								}, 400)
+									navigate("/")
+								} catch (error) {
+									alert("Login failed")
+									console.log(error)
+									setSubmitting(false)
+								}
 							}}>
 							{({
 								values,
@@ -86,13 +105,22 @@ const LoginPage = () => {
 										</label>
 									</div>
 
+									<Link to="/register" className="link">
+										Click here to register
+									</Link>
+
 									<div className="form-control mt-6">
-										<button
-											type="submit"
-											disabled={isSubmitting}
-											className="btn btn-primary">
-											Login
-										</button>
+										{!isSubmitting ? (
+											<button
+												type="submit"
+												className="btn btn-primary">
+												Login
+											</button>
+										) : (
+											<div
+												className="radial-progress animate-spin"
+												style={{ "--value": 50 }}></div>
+										)}
 									</div>
 								</form>
 							)}
