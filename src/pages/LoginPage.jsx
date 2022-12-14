@@ -1,10 +1,14 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Formik } from "formik"
 import axios from "axios"
 
 const LoginPage = () => {
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (localStorage.getItem("user")) navigate("/")
+	}, [navigate])
 
 	return (
 		<div className="hero min-h-[80vh] bg-base-200">
@@ -37,7 +41,7 @@ const LoginPage = () => {
 									localStorage.setItem(
 										"user",
 										JSON.stringify({
-											...data,
+											...data.user,
 											password: "",
 										})
 									)
