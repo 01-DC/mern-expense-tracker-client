@@ -1,20 +1,36 @@
 import React from "react"
+import { Link, useNavigate } from "react-router-dom"
 
 const Header = () => {
+	const navigate = useNavigate()
+
+	const logoutHandler = () => {
+		localStorage.removeItem("user")
+		navigate("/login")
+	}
 	return (
 		<div className="navbar bg-base-100">
 			<div className="flex-1">
-				<a className="btn btn-ghost normal-case text-xl">
+				<Link to="/" className="btn btn-ghost normal-case text-xl">
 					Expense Tracker
-				</a>
+				</Link>
 			</div>
 			<div className="flex-none">
-				<ul className="menu menu-horizontal px-1">
+				<ul className="menu menu-horizontal px-1 gap-3">
 					<li>
-						<a>Item 1</a>
+						<Link
+							to="/settings"
+							className="btn btn-outline btn-secondary">
+							Settings
+						</Link>
 					</li>
+
 					<li>
-						<a>Item 3</a>
+						<button
+							className="btn btn-outline btn-primary"
+							onClick={logoutHandler}>
+							Logout
+						</button>
 					</li>
 				</ul>
 			</div>
