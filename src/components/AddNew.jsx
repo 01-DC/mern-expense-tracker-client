@@ -7,7 +7,7 @@ const AddNew = () => {
 	const { loginUser, setExpenses, userSetting } = useStateContext()
 	return (
 		<div>
-			<label htmlFor="my-modal" className="btn btn-primary">
+			<label htmlFor="my-modal" className="btn btn-lg btn-primary">
 				add new expense
 			</label>
 
