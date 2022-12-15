@@ -4,7 +4,7 @@ import { useStateContext } from "../contexts/ContextProvider"
 
 const Header = () => {
 	const navigate = useNavigate()
-	const { setLoginUser, setUserSetting } = useStateContext()
+	const { loginUser, setLoginUser, setUserSetting } = useStateContext()
 
 	const logoutHandler = () => {
 		localStorage.removeItem("user")
@@ -15,12 +15,17 @@ const Header = () => {
 	}
 	return (
 		<div className="navbar bg-base-100">
-			<div className="flex-1">
+			<div className="navbar-start">
 				<Link to="/" className="btn btn-ghost normal-case text-xl">
 					Expense Tracker
 				</Link>
 			</div>
-			<div className="flex-none">
+			<div className="navbar-center">
+				<div className="btn btn-ghost normal-case text-xl text-accent">
+					{`Welcome ${loginUser.name}`}
+				</div>
+			</div>
+			<div className="navbar-end">
 				<ul className="menu menu-horizontal px-1 gap-3">
 					<li>
 						<Link
