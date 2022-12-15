@@ -4,7 +4,7 @@ import { useStateContext } from "../contexts/ContextProvider"
 import axios from "axios"
 
 const ExpenseTable = () => {
-	const { expenses, setExpenses } = useStateContext()
+	const { expenses, setExpenses, userSetting } = useStateContext()
 	const [editableExpense, setEditableExpense] = useState("")
 
 	const deleteHandler = async (exp) => {
@@ -83,16 +83,15 @@ const ExpenseTable = () => {
 							const errors = {}
 							if (values.amount === 0)
 								errors.amount = "Expense cannot be zero"
-
+							if (values.category === "--")
+								errors.category = "Select valid category"
 							if (!values.description)
 								errors.description = "Required"
 
 							return errors
 						}}
-						onSubmit={async (values) => {
+						onSubmit={async (values, actions) => {
 							try {
-								// console.log(editableExpense)
-								// console.log(values)
 								await axios.post(
 									"/api/v1/expenses/edit-expense",
 									{
@@ -116,7 +115,6 @@ const ExpenseTable = () => {
 											: exp
 									)
 								})
-								// console.log(expenses)
 							} catch (error) {
 								alert("Update failed")
 								console.log(error)
@@ -149,9 +147,11 @@ const ExpenseTable = () => {
 									name="category"
 									className="input input-bordered"
 									as="select">
-									<option value="red">Red</option>
-									<option value="green">Green</option>
-									<option value="blue">Blue</option>
+									{userSetting.categories.map((cat, i) => (
+										<option key={i} value={cat}>
+											{cat}
+										</option>
+									))}
 								</Field>
 							</div>
 

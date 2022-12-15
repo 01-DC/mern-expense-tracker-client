@@ -22,7 +22,7 @@ const Header = () => {
 			</div>
 			<div className="navbar-center">
 				<div className="btn btn-ghost normal-case text-xl text-accent">
-					{`Welcome ${loginUser.name}`}
+					{loginUser ? `Welcome ${loginUser.name}` : "Hello there"}
 				</div>
 			</div>
 			<div className="navbar-end">
