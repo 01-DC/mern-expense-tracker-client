@@ -2,7 +2,17 @@
 
 ### Description
 
-This repository contains frontend code for the mern-expense-tracker app.
+Does just as it says. Track your daily expenses with ease using this expense tracker app. This repository contains frontend code for the mern-expense-tracker app.
+
+### Features
+
+-   Login and Signup feature with anti forced browsing safety.
+-   Complete CRUD support on expenses.
+-   Add expenses in any category with description.
+-   Update your budget any time.
+-   Add or Delete your own category tags.
+-   Summary chart on home screen to get overview of expenditure.
+-   Separate settings page to manage your budget and category labels.
 
 ### Libraries Used
 
