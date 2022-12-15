@@ -5,7 +5,7 @@ import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 
 const LoginPage = () => {
-	const { setLoginUser } = useStateContext()
+	const { setLoginUser, setUserSetting } = useStateContext()
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -40,6 +40,10 @@ const LoginPage = () => {
 										"/api/v1/users/login",
 										values
 									)
+									const { data: setting } = await axios.post(
+										"/api/v1/settings/get-setting",
+										{ userid: values.email }
+									)
 									localStorage.setItem(
 										"user",
 										JSON.stringify({
@@ -47,8 +51,14 @@ const LoginPage = () => {
 											password: "",
 										})
 									)
+									localStorage.setItem(
+										"setting",
+										JSON.stringify(setting)
+									)
 									setLoginUser({ ...data.user, password: "" })
+									setUserSetting(setting)
 									setSubmitting(false)
+
 									navigate("/")
 								} catch (error) {
 									alert("Login failed")

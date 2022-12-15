@@ -9,7 +9,7 @@ const RegisterPage = () => {
 	useEffect(() => {
 		if (localStorage.getItem("user")) navigate("/")
 	}, [navigate])
-	
+
 	return (
 		<div className="hero min-h-[80vh] bg-base-200">
 			<div className="hero-content flex-col lg:flex-row-reverse">
@@ -40,6 +40,10 @@ const RegisterPage = () => {
 									await axios.post(
 										"/api/v1/users/register",
 										values
+									)
+									await axios.post(
+										"/api/v1/settings/add-setting",
+										{ userid: values.email }
 									)
 									setSubmitting(false)
 									navigate("/login")

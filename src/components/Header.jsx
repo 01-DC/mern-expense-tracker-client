@@ -4,11 +4,13 @@ import { useStateContext } from "../contexts/ContextProvider"
 
 const Header = () => {
 	const navigate = useNavigate()
-	const { setLoginUser } = useStateContext()
+	const { setLoginUser, setUserSetting } = useStateContext()
 
 	const logoutHandler = () => {
 		localStorage.removeItem("user")
+		localStorage.removeItem("setting")
 		setLoginUser("")
+		setUserSetting("")
 		navigate("/login")
 	}
 	return (
