@@ -4,7 +4,7 @@ import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 
 const AddNew = () => {
-	const { loginUser, setExpenses } = useStateContext()
+	const { loginUser, setExpenses, userSetting } = useStateContext()
 	return (
 		<div>
 			<label htmlFor="my-modal" className="btn btn-primary">
@@ -26,20 +26,21 @@ const AddNew = () => {
 					<Formik
 						initialValues={{
 							amount: 0,
-							category: "Select",
+							category: "--",
 							description: "",
 						}}
 						validate={(values) => {
 							const errors = {}
 							if (values.amount === 0)
 								errors.amount = "Expense cannot be zero"
-
+							if (values.category === "--")
+								errors.category = "Select valid category"
 							if (!values.description)
 								errors.description = "Required"
 
 							return errors
 						}}
-						onSubmit={async (values) => {
+						onSubmit={async (values, actions) => {
 							try {
 								const { data } = await axios.post(
 									"/api/v1/expenses/add-expense",
@@ -51,6 +52,7 @@ const AddNew = () => {
 								setExpenses((prev) => {
 									return [...prev, data]
 								})
+								actions.resetForm()
 							} catch (error) {
 								alert("Save failed")
 								console.log(error)
@@ -83,9 +85,12 @@ const AddNew = () => {
 									name="category"
 									className="input input-bordered"
 									as="select">
-									<option value="red">Red</option>
-									<option value="green">Green</option>
-									<option value="blue">Blue</option>
+									<option value="--">--</option>
+									{userSetting.categories.map((cat, i) => (
+										<option key={i} value={cat}>
+											{cat}
+										</option>
+									))}
 								</Field>
 							</div>
 
@@ -114,11 +119,6 @@ const AddNew = () => {
 							</div>
 						</Form>
 					</Formik>
-					{/* <div className="modal-action">
-						<label htmlFor="my-modal" className="btn">
-							save
-						</label>
-					</div> */}
 				</div>
 			</div>
 		</div>

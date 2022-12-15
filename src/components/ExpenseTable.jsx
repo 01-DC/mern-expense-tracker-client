@@ -21,13 +21,6 @@ const ExpenseTable = () => {
 		}
 	}
 
-	const editHandler = async (exp) => {
-		try {
-		} catch (error) {
-			alert("Updation failed")
-			console.log(error)
-		}
-	}
 	return (
 		<div className="overflow-x-auto my-8">
 			<h2 className="font-bold text-2xl text-center my-4 text-secondary">

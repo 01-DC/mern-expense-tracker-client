@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react"
+import { useStateContext } from "../contexts/ContextProvider"
 
 const SummaryChart = () => {
-  return (
-    <div>SummaryChart</div>
-  )
+	const { expenses, userSetting } = useStateContext()
+
+	return <div>SummaryChart</div>
 }
 
 export default SummaryChart
