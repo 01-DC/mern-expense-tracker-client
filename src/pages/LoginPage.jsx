@@ -2,8 +2,10 @@ import React, { useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Formik } from "formik"
 import axios from "axios"
+import { useStateContext } from "../contexts/ContextProvider"
 
 const LoginPage = () => {
+	const { setLoginUser } = useStateContext()
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -45,6 +47,7 @@ const LoginPage = () => {
 											password: "",
 										})
 									)
+									setLoginUser({ ...data.user, password: "" })
 									setSubmitting(false)
 									navigate("/")
 								} catch (error) {

@@ -1,11 +1,14 @@
 import React from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { useStateContext } from "../contexts/ContextProvider"
 
 const Header = () => {
 	const navigate = useNavigate()
+	const { setLoginUser } = useStateContext()
 
 	const logoutHandler = () => {
 		localStorage.removeItem("user")
+		setLoginUser("")
 		navigate("/login")
 	}
 	return (
