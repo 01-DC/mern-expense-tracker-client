@@ -4,7 +4,7 @@ import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 
 const AddNew = () => {
-	const { loginUser } = useStateContext()
+	const { loginUser, setExpenses } = useStateContext()
 	return (
 		<div>
 			<label htmlFor="my-modal" className="btn btn-primary">
@@ -41,10 +41,15 @@ const AddNew = () => {
 						}}
 						onSubmit={async (values) => {
 							try {
-								console.log(loginUser)
-								await axios.post("/api/v1/add-expense", {
-									userid: loginUser.email,
-									...values,
+								const { data } = await axios.post(
+									"/api/v1/expenses/add-expense",
+									{
+										userid: loginUser.email,
+										...values,
+									}
+								)
+								setExpenses((prev) => {
+									return [...prev, data]
 								})
 							} catch (error) {
 								alert("Save failed")
