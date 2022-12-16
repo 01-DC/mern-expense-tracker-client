@@ -153,6 +153,11 @@ const ExpenseTable = () => {
 										</option>
 									))}
 								</Field>
+								<ErrorMessage
+									name="category"
+									className="label text-sm text-red-500"
+									component={"div"}
+								/>
 							</div>
 
 							<div className="form-control">

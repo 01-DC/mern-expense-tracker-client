@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom"
 
 import Footer from "./components/Footer"
 import Header from "./components/Header"
+import Toast from "./components/Toast"
 import HomePage from "./pages/HomePage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
@@ -10,7 +11,7 @@ import SettingsPage from "./pages/SettingsPage"
 
 function App() {
 	return (
-		<>
+		<div>
 			<Header />
 			<Routes>
 				<Route
@@ -33,7 +34,8 @@ function App() {
 				<Route path="/login" element={<LoginPage />} />
 			</Routes>
 			<Footer />
-		</>
+			<Toast />
+		</div>
 	)
 }
 

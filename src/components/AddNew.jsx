@@ -4,7 +4,8 @@ import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 
 const AddNew = () => {
-	const { loginUser, setExpenses, userSetting } = useStateContext()
+	const { loginUser, setExpenses, userSetting, showToastHandler } =
+		useStateContext()
 	return (
 		<div>
 			<label htmlFor="my-modal" className="btn btn-lg btn-primary">
@@ -52,6 +53,7 @@ const AddNew = () => {
 								setExpenses((prev) => {
 									return [...prev, data]
 								})
+								showToastHandler("Expense Saved")
 								actions.resetForm()
 							} catch (error) {
 								alert("Save failed")
@@ -92,6 +94,11 @@ const AddNew = () => {
 										</option>
 									))}
 								</Field>
+								<ErrorMessage
+									name="category"
+									className="label text-sm text-red-500"
+									component={"div"}
+								/>
 							</div>
 
 							<div className="form-control">
