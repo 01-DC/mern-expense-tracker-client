@@ -15,7 +15,7 @@ const HomePage = () => {
 				userid,
 			})
 			setExpenses(res.data)
-			console.log(res.data)
+			// console.log(res.data)
 		} catch (error) {
 			alert("Fetching expenses failed")
 			console.log(error)

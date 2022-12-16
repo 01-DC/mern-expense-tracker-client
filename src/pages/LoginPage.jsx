@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Formik } from "formik"
+import { Formik, Form, Field, ErrorMessage } from "formik"
 import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 
@@ -19,7 +19,7 @@ const LoginPage = () => {
 					<h1 className="text-5xl font-bold">Login</h1>
 					<p className="py-6">Track your expenses with ease!</p>
 				</div>
-				<div className="card flex-shrink-0 w-2/3 max-w-sm shadow-2xl bg-base-100">
+				<div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
 					<div className="card-body">
 						<Formik
 							initialValues={{
@@ -66,67 +66,51 @@ const LoginPage = () => {
 									setSubmitting(false)
 								}
 							}}>
-							{({
-								values,
-								errors,
-								touched,
-								handleChange,
-								handleBlur,
-								handleSubmit,
-								isSubmitting,
-								/* and other goodies */
-							}) => (
-								<form onSubmit={handleSubmit}>
+							{({ isSubmitting }) => (
+								<Form>
 									<div className="form-control">
-										<label className="label">
-											<span className="label-text">
-												Email
-											</span>
+										<label
+											className="label"
+											htmlFor="email">
+											Email
 										</label>
-										<input
+										<Field
+											id="email"
 											type="email"
 											name="email"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.email}
 											className="input input-bordered"
 										/>
-										<label className="label">
-											<span className="label-text-alt text-red-500">
-												{errors.email &&
-													touched.email &&
-													errors.email}
-											</span>
-										</label>
+										<ErrorMessage
+											name="email"
+											className="label text-sm text-red-500"
+											component={"div"}
+										/>
 									</div>
 									<div className="form-control">
 										<label className="label">
-											<span className="label-text">
-												Password
-											</span>
+											Password
 										</label>
-										<input
+										<Field
+											id="password"
 											type="password"
 											name="password"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.password}
 											className="input input-bordered"
 										/>
-										<label className="label">
-											<span className="label-text-alt text-red-500">
-												{errors.password &&
-													touched.password &&
-													errors.password}
-											</span>
-										</label>
+										<ErrorMessage
+											name="password"
+											className="label text-sm text-red-500"
+											component={"div"}
+										/>
 									</div>
 
-									<Link to="/register" className="link">
-										Click here to register
-									</Link>
+									<div className="mt-6 mb-2">
+										<Link to="/register" className="link">
+											First time user? Click here to
+											register
+										</Link>
+									</div>
 
-									<div className="form-control mt-6">
+									<div className="form-control">
 										{!isSubmitting ? (
 											<button
 												type="submit"
@@ -139,7 +123,7 @@ const LoginPage = () => {
 												style={{ "--value": 50 }}></div>
 										)}
 									</div>
-								</form>
+								</Form>
 							)}
 						</Formik>
 					</div>

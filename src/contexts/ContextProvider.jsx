@@ -3,17 +3,26 @@ import React, { createContext, useContext, useState } from "react"
 const StateContext = createContext()
 
 export const ContextProvider = ({ children }) => {
+	const [expenses, setExpenses] = useState([])
+	const [toast, setToast] = useState({ show: false, desc: "" })
+
 	const [loginUser, setLoginUser] = useState(() =>
 		JSON.parse(localStorage.getItem("user"))
 	)
 	const [userSetting, setUserSetting] = useState(
 		JSON.parse(localStorage.getItem("setting"))
 	)
-	const [expenses, setExpenses] = useState([])
 
 	const setUserSettingHandler = (arg) => {
 		localStorage.setItem("setting", JSON.stringify(arg))
 		setUserSetting(arg)
+	}
+
+	const showToastHandler = (desc) => {
+		setToast({ show: true, desc })
+		setTimeout(() => {
+			setToast({ show: false, desc: "" })
+		}, 2000)
 	}
 
 	return (
@@ -26,6 +35,8 @@ export const ContextProvider = ({ children }) => {
 				userSetting,
 				setUserSettingHandler,
 				setUserSetting,
+				toast,
+				showToastHandler,
 			}}>
 			{children}
 		</StateContext.Provider>
