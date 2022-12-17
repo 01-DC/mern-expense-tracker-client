@@ -61,11 +61,19 @@ const LoginPage = () => {
 									setLoginUser({ ...data.user, password: "" })
 									setUserSetting(setting)
 									setSubmitting(false)
-									showToastHandler(
-										"Login successful",
-										"success"
-									)
-									navigate("/")
+									if (setting.budget === 0) {
+										showToastHandler(
+											"Please set budget & categories",
+											"warning"
+										)
+										navigate("/settings")
+									} else {
+										showToastHandler(
+											"Login successful",
+											"success"
+										)
+										navigate("/")
+									}
 								} catch (error) {
 									showToastHandler("Login failed", "error")
 									console.log(error)
