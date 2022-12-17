@@ -34,9 +34,35 @@ const Header = () => {
 							/>
 						</svg>
 					</label>
-					<ul
-						tabIndex={0}
-						className="menu menu-compact dropdown-content mt-3 p-2 shadow-2xl bg-base-100 rounded-box w-52 gap-4">
+					{loginUser && (
+						<ul
+							tabIndex={0}
+							className="menu menu-compact dropdown-content mt-3 p-2 shadow-2xl bg-base-100 rounded-box w-52 gap-4">
+							<li>
+								<Link
+									to="/settings"
+									className="btn btn-outline btn-secondary">
+									Settings
+								</Link>
+							</li>
+
+							<li>
+								<button
+									className="btn btn-outline btn-primary"
+									onClick={logoutHandler}>
+									Logout
+								</button>
+							</li>
+						</ul>
+					)}
+				</div>
+				<Link to="/" className="btn glass normal-case sm:text-xl">
+					Expense Tracker
+				</Link>
+			</div>
+			<div className="navbar-center hidden lg:flex">
+				{loginUser && (
+					<ul className="menu menu-horizontal px-1 gap-3">
 						<li>
 							<Link
 								to="/settings"
@@ -53,31 +79,7 @@ const Header = () => {
 							</button>
 						</li>
 					</ul>
-				</div>
-				<Link to="/" className="btn glass normal-case sm:text-xl">
-					Expense Tracker
-				</Link>
-			</div>
-			<div className="navbar-center hidden lg:flex">
-				<ul className="menu menu-horizontal px-1 gap-3">
-					<li>
-						<Link
-							to="/settings"
-							className="btn btn-outline btn-secondary">
-							Settings
-						</Link>
-					</li>
-
-					{loginUser && (
-						<li>
-							<button
-								className="btn btn-outline btn-primary"
-								onClick={logoutHandler}>
-								Logout
-							</button>
-						</li>
-					)}
-				</ul>
+				)}
 			</div>
 			<div className="navbar-end">
 				<div className="btn btn-ghost normal-case sm:text-xl text-accent">
