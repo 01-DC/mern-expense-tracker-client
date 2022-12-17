@@ -1,14 +1,15 @@
-import React, { useEffect } from "react"
+import React from "react"
 import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 
 const SettingsPage = () => {
-	const { userSetting, setUserSettingHandler } = useStateContext()
+	const { userSetting, setUserSettingHandler, showToastHandler } =
+		useStateContext()
 
 	const deleteHandler = async (cat) => {
 		if (userSetting.categories.length === 1) {
-			alert("Cannot delete last value")
+			showToastHandler("Cannot delete last value", "error")
 			return
 		}
 
@@ -26,8 +27,9 @@ const SettingsPage = () => {
 				},
 			})
 			setUserSettingHandler(newSetting)
+			showToastHandler("Category deleted", "success")
 		} catch (error) {
-			alert("Delete failed")
+			showToastHandler("Deleting category failed", "error")
 			console.log(error)
 		}
 	}
@@ -68,8 +70,15 @@ const SettingsPage = () => {
 									)
 									setUserSettingHandler(newSetting)
 									actions.resetForm()
+									showToastHandler(
+										"Budget updated",
+										"success"
+									)
 								} catch (error) {
-									alert("Updating budget failed")
+									showToastHandler(
+										"Updating budget failed",
+										"error"
+									)
 									console.log(error)
 								}
 							}}>
@@ -159,8 +168,12 @@ const SettingsPage = () => {
 								)
 								setUserSettingHandler(newSetting)
 								actions.resetForm()
+								showToastHandler("Category added", "success")
 							} catch (error) {
-								alert("Adding category failed")
+								showToastHandler(
+									"Adding category failed",
+									"error"
+								)
 								console.log(error)
 							}
 						}}>

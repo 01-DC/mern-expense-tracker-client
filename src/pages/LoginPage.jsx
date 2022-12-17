@@ -5,7 +5,7 @@ import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 
 const LoginPage = () => {
-	const { setLoginUser, setUserSetting } = useStateContext()
+	const { setLoginUser, setUserSetting, showToastHandler } = useStateContext()
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -34,7 +34,10 @@ const LoginPage = () => {
 									errors.password = "Password cannot be empty"
 								return errors
 							}}
-							onSubmit={async (values, { setSubmitting }) => {
+							onSubmit={async (
+								values,
+								{ setSubmitting, resetForm }
+							) => {
 								try {
 									const { data } = await axios.post(
 										"/api/v1/users/login",
@@ -58,11 +61,15 @@ const LoginPage = () => {
 									setLoginUser({ ...data.user, password: "" })
 									setUserSetting(setting)
 									setSubmitting(false)
-
+									showToastHandler(
+										"Login successful",
+										"success"
+									)
 									navigate("/")
 								} catch (error) {
-									alert("Login failed")
+									showToastHandler("Login failed", "error")
 									console.log(error)
+									resetForm()
 									setSubmitting(false)
 								}
 							}}>
@@ -119,8 +126,12 @@ const LoginPage = () => {
 											</button>
 										) : (
 											<div
-												className="radial-progress animate-spin"
-												style={{ "--value": 50 }}></div>
+												className="radial-progress text-primary animate-spin"
+												style={{
+													"--value": 50,
+													"--size": "3rem",
+													"--thickness": "8px",
+												}}></div>
 										)}
 									</div>
 								</Form>

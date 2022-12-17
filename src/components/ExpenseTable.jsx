@@ -2,10 +2,13 @@ import React, { useState } from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import { useStateContext } from "../contexts/ContextProvider"
 import axios from "axios"
+import { useRef } from "react"
 
 const ExpenseTable = () => {
-	const { expenses, setExpenses, userSetting } = useStateContext()
+	const { expenses, setExpenses, userSetting, showToastHandler } =
+		useStateContext()
 	const [editableExpense, setEditableExpense] = useState("")
+	const modalRefEdit = useRef()
 
 	const deleteHandler = async (exp) => {
 		try {
@@ -15,8 +18,9 @@ const ExpenseTable = () => {
 			setExpenses((prev) => {
 				return prev.filter((p) => exp._id !== p._id)
 			})
+			showToastHandler("Expense Deleted", "success")
 		} catch (error) {
-			alert("Delete failed")
+			showToastHandler("Delete failed", "error")
 			console.log(error)
 		}
 	}
@@ -60,7 +64,12 @@ const ExpenseTable = () => {
 					))}
 				</tbody>
 			</table>
-			<input type="checkbox" id="my-modal-2" className="modal-toggle" />
+			<input
+				type="checkbox"
+				id="my-modal-2"
+				className="modal-toggle"
+				ref={modalRefEdit}
+			/>
 			<div className="modal">
 				<div className="modal-box">
 					<label
@@ -90,7 +99,7 @@ const ExpenseTable = () => {
 
 							return errors
 						}}
-						onSubmit={async (values, actions) => {
+						onSubmit={async (values) => {
 							try {
 								await axios.post(
 									"/api/v1/expenses/edit-expense",
@@ -115,8 +124,10 @@ const ExpenseTable = () => {
 											: exp
 									)
 								})
+								showToastHandler("Expense updated", "success")
+								modalRefEdit.current.checked = false
 							} catch (error) {
-								alert("Update failed")
+								showToastHandler("Update failed", "error")
 								console.log(error)
 							}
 						}}>

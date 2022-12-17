@@ -4,17 +4,19 @@ import { useStateContext } from "../contexts/ContextProvider"
 
 const Header = () => {
 	const navigate = useNavigate()
-	const { loginUser, setLoginUser, setUserSetting } = useStateContext()
+	const { loginUser, setLoginUser, setUserSetting, showToastHandler } =
+		useStateContext()
 
 	const logoutHandler = () => {
 		localStorage.removeItem("user")
 		localStorage.removeItem("setting")
 		setLoginUser("")
 		setUserSetting("")
+		showToastHandler("Logout successful", "success")
 		navigate("/login")
 	}
 	return (
-		<div className="navbar bg-base-100">
+		<div className="navbar bg-base-100 py-4">
 			<div className="navbar-start">
 				<div className="dropdown">
 					<label tabIndex={0} className="btn btn-ghost lg:hidden">

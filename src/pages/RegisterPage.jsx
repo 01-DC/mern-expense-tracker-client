@@ -2,9 +2,11 @@ import React, { useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Formik, Field, Form, ErrorMessage } from "formik"
 import axios from "axios"
+import { useStateContext } from "../contexts/ContextProvider"
 
 const RegisterPage = () => {
 	const navigate = useNavigate()
+	const { showToastHandler } = useStateContext()
 
 	useEffect(() => {
 		if (localStorage.getItem("user")) navigate("/")
@@ -35,7 +37,10 @@ const RegisterPage = () => {
 									errors.password = "Password cannot be empty"
 								return errors
 							}}
-							onSubmit={async (values, { setSubmitting }) => {
+							onSubmit={async (
+								values,
+								{ setSubmitting, resetForm }
+							) => {
 								try {
 									await axios.post(
 										"/api/v1/users/register",
@@ -46,10 +51,18 @@ const RegisterPage = () => {
 										{ userid: values.email }
 									)
 									setSubmitting(false)
+									showToastHandler(
+										"Registration successful",
+										"success"
+									)
 									navigate("/login")
 								} catch (error) {
-									alert("Registration failed")
+									showToastHandler(
+										"Registration failed",
+										"error"
+									)
 									console.log(error)
+									resetForm()
 									setSubmitting(false)
 								}
 							}}>
@@ -123,8 +136,12 @@ const RegisterPage = () => {
 											</button>
 										) : (
 											<div
-												className="radial-progress animate-spin"
-												style={{ "--value": 50 }}></div>
+												className="radial-progress text-primary animate-spin"
+												style={{
+													"--value": 50,
+													"--size": "3rem",
+													"--thickness": "8px",
+												}}></div>
 										)}
 									</div>
 								</Form>

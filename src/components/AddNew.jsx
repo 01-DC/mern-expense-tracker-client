@@ -6,6 +6,7 @@ import { useStateContext } from "../contexts/ContextProvider"
 const AddNew = () => {
 	const { loginUser, setExpenses, userSetting, showToastHandler } =
 		useStateContext()
+
 	return (
 		<div>
 			<label htmlFor="my-modal" className="btn btn-lg btn-primary">
@@ -53,10 +54,10 @@ const AddNew = () => {
 								setExpenses((prev) => {
 									return [...prev, data]
 								})
-								showToastHandler("Expense Saved")
+								showToastHandler("Expense Saved", "success")
 								actions.resetForm()
 							} catch (error) {
-								alert("Save failed")
+								showToastHandler("Save failed", "error")
 								console.log(error)
 							}
 						}}>

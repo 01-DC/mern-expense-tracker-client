@@ -4,7 +4,11 @@ const StateContext = createContext()
 
 export const ContextProvider = ({ children }) => {
 	const [expenses, setExpenses] = useState([])
-	const [toast, setToast] = useState({ show: false, desc: "" })
+	const [toast, setToast] = useState({
+		show: false,
+		desc: "",
+		type: "success",
+	})
 
 	const [loginUser, setLoginUser] = useState(() =>
 		JSON.parse(localStorage.getItem("user"))
@@ -18,11 +22,11 @@ export const ContextProvider = ({ children }) => {
 		setUserSetting(arg)
 	}
 
-	const showToastHandler = (desc) => {
-		setToast({ show: true, desc })
+	const showToastHandler = (desc, type) => {
+		setToast({ show: true, desc, type })
 		setTimeout(() => {
-			setToast({ show: false, desc: "" })
-		}, 2000)
+			setToast({ show: false, desc: "", type })
+		}, 3500)
 	}
 
 	return (

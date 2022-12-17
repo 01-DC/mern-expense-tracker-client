@@ -20,7 +20,7 @@ const SummaryChart = () => {
 					"--size": "12rem",
 					"--thickness": "15px",
 				}}>
-				{`${(spent / userSetting.budget) * 100}% spent`}
+				{`${((spent / userSetting.budget) * 100).toFixed(2)}% spent`}
 			</div>
 			<div className="text-center mt-4 font-bold">
 				<h2>{`Total Spent: ${spent}`}</h2>
