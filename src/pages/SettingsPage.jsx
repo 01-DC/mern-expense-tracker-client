@@ -37,7 +37,9 @@ const SettingsPage = () => {
 	return (
 		<div className="p-8">
 			<div className="card-body items-center">
-				<h2 className="card-title">Your Budget</h2>
+				<h2 className="card-title text-2xl text-primary">
+					Your Budget
+				</h2>
 				<p className="stat-value my-4">${userSetting.budget}</p>
 
 				<div className="form-control">
@@ -194,7 +196,7 @@ const SettingsPage = () => {
 							<div className="form-control mt-6">
 								<button
 									type="submit"
-									className="btn btn-primary">
+									className="btn btn-secondary">
 									add category
 								</button>
 							</div>

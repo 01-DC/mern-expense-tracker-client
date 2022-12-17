@@ -54,7 +54,7 @@ const Header = () => {
 						</li>
 					</ul>
 				</div>
-				<Link to="/" className="btn btn-ghost normal-case text-xl">
+				<Link to="/" className="btn btn-ghost normal-case sm:text-xl">
 					Expense Tracker
 				</Link>
 			</div>
@@ -78,8 +78,10 @@ const Header = () => {
 				</ul>
 			</div>
 			<div className="navbar-end">
-				<div className="btn btn-ghost normal-case text-xl text-accent">
-					{loginUser ? `Welcome ${loginUser.name}` : "Hello there"}
+				<div className="btn btn-ghost normal-case sm:text-xl text-accent">
+					{loginUser
+						? `Welcome ${loginUser.name.replace(/ .*/, "")}`
+						: "Hello there"}
 				</div>
 			</div>
 		</div>

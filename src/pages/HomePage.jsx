@@ -28,7 +28,7 @@ const HomePage = () => {
 
 	return (
 		<div className="p-8">
-			<div className="flex items-center justify-around">
+			<div className="flex flex-col-reverse md:flex-row items-center justify-around">
 				<AddNew />
 				<SummaryChart />
 			</div>

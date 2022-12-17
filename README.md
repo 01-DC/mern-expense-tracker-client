@@ -19,6 +19,8 @@ Does just as it says. Track your daily expenses with ease using this expense tra
 -   Add or Delete your own category tags.
 -   Summary chart on home screen to get overview of expenditure.
 -   Separate settings page to manage your budget and category labels.
+-   Custom made Toast system to display error and success messages.
+-   Full responsive site.
 
 ### Libraries Used
 

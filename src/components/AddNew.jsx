@@ -8,7 +8,7 @@ const AddNew = () => {
 		useStateContext()
 
 	return (
-		<div>
+		<div className="mt-4 md:mt-0">
 			<label htmlFor="my-modal" className="btn btn-lg btn-primary">
 				add new expense
 			</label>
