@@ -16,7 +16,7 @@ const Header = () => {
 		navigate("/login")
 	}
 	return (
-		<div className="navbar bg-base-100 py-4">
+		<div className="navbar bg-base-100 py-4 sticky top-0 backdrop-blur bg-opacity-50 z-50">
 			<div className="navbar-start">
 				<div className="dropdown">
 					<label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -54,7 +54,7 @@ const Header = () => {
 						</li>
 					</ul>
 				</div>
-				<Link to="/" className="btn btn-ghost normal-case sm:text-xl">
+				<Link to="/" className="btn glass normal-case sm:text-xl">
 					Expense Tracker
 				</Link>
 			</div>
@@ -68,13 +68,15 @@ const Header = () => {
 						</Link>
 					</li>
 
-					<li>
-						<button
-							className="btn btn-outline btn-primary"
-							onClick={logoutHandler}>
-							Logout
-						</button>
-					</li>
+					{loginUser && (
+						<li>
+							<button
+								className="btn btn-outline btn-primary"
+								onClick={logoutHandler}>
+								Logout
+							</button>
+						</li>
+					)}
 				</ul>
 			</div>
 			<div className="navbar-end">

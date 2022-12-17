@@ -4,7 +4,7 @@ import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 
 const AddNew = () => {
-	const { loginUser, setExpenses, userSetting, showToastHandler } =
+	const { loginUser, expenses, setExpenses, userSetting, showToastHandler } =
 		useStateContext()
 
 	return (
@@ -27,14 +27,24 @@ const AddNew = () => {
 
 					<Formik
 						initialValues={{
-							amount: 0,
+							amount: "",
 							category: "--",
 							description: "",
 						}}
 						validate={(values) => {
 							const errors = {}
-							if (values.amount === 0)
-								errors.amount = "Expense cannot be zero"
+							let sum = 0
+							expenses.forEach((e) => (sum += e.amount))
+
+							if (parseInt(values.amount) <= 0)
+								errors.amount = "Expense cannot be zero or less"
+							else if (
+								parseInt(values.amount) >
+								userSetting.budget - sum
+							)
+								errors.amount =
+									"Expense cannot be more than budget"
+
 							if (values.category === "--")
 								errors.category = "Select valid category"
 							if (!values.description)
@@ -71,6 +81,7 @@ const AddNew = () => {
 									name="amount"
 									className="input input-bordered"
 									type="number"
+									placeholder={0}
 								/>
 								<ErrorMessage
 									name="amount"
