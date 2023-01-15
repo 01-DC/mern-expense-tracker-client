@@ -51,14 +51,13 @@ const LoginPage = () => {
 										"user",
 										JSON.stringify({
 											...data.user,
-											password: "",
 										})
 									)
 									localStorage.setItem(
 										"setting",
 										JSON.stringify(setting)
 									)
-									setLoginUser({ ...data.user, password: "" })
+									setLoginUser({ ...data.user })
 									setUserSetting(setting)
 									setSubmitting(false)
 									if (setting.budget === 0) {

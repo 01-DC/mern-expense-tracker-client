@@ -7,7 +7,8 @@ import { ContextProvider } from "./contexts/ContextProvider"
 import App from "./App"
 import "./index.css"
 
-axios.defaults.baseURL = "https://mern-expense-tracker-api.onrender.com"
+// axios.defaults.baseURL = "https://mern-expense-tracker-api.onrender.com"
+axios.defaults.baseURL = "http://localhost:8080"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
