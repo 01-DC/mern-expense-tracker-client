@@ -3,9 +3,23 @@ import { Formik, Form, Field, ErrorMessage } from "formik"
 import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
 
+const SplitTable = ({ split }) => {
+	return (
+		<tbody>
+			{split.map((sp, i) => (
+				<tr key={i}>
+					<td>{sp.name}</td>
+					<td>{sp.email}</td>
+					<td>{sp.paid ? "Paid" : "Unpaid"}</td>
+				</tr>
+			))}
+		</tbody>
+	)
+}
+
 const SplitModal = ({ splitExpense }) => {
 	const modalRefSplit = useRef()
-	const { userSetting, showToastHandler, setExpenses } = useStateContext()
+	const { showToastHandler, setExpenses } = useStateContext()
 
 	return (
 		<div>
@@ -23,107 +37,80 @@ const SplitModal = ({ splitExpense }) => {
 						✕
 					</label>
 					<h3 className="font-bold text-lg">Split your expense</h3>
-
+					{splitExpense ? (
+						<div>
+							<table className="table table-zebra w-full">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Email</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<SplitTable split={splitExpense.split} />
+							</table>
+						</div>
+					) : (
+						<div />
+					)}
 					<Formik
 						initialValues={{
 							name: "",
-							email: "",
 						}}
 						enableReinitialize
 						validate={(values) => {
 							const errors = {}
-							if (values.amount === 0)
-								errors.amount = "Expense cannot be zero"
-							if (values.category === "--")
-								errors.category = "Select valid category"
-							if (!values.description)
-								errors.description = "Required"
+							if (!values.name) errors.name = "Required"
 
 							return errors
 						}}
 						onSubmit={async (values) => {
 							try {
 								await axios.post(
-									"/api/v1/expenses/edit-expense",
+									"/api/v1/expenses/split-expense",
 									{
-										expenseId: editableExpense._id,
+										expenseId: splitExpense._id,
 										payload: {
-											...values,
-											userid: editableExpense.userid,
+											name: values.name,
+											email: "",
+											paid: false,
 										},
 									}
 								)
+								const newSplit = splitExpense.split.push({
+									name: values.name,
+									email: "",
+									paid: false,
+								})
 								setExpenses((prev) => {
 									return prev.map((exp) =>
-										exp._id === editableExpense._id
+										exp._id === splitExpense._id
 											? {
 													...exp,
-													amount: values.amount,
-													category: values.category,
-													description:
-														values.description,
+													split: newSplit,
 											  }
 											: exp
 									)
 								})
-								showToastHandler("Expense updated", "success")
-								modalRefEdit.current.checked = false
+								showToastHandler("Expense split", "success")
+								modalRefSplit.current.checked = false
 							} catch (error) {
-								showToastHandler("Update failed", "error")
+								showToastHandler("Split failed", "error")
 								console.log(error)
 							}
 						}}>
 						<Form>
 							<div className="form-control">
-								<label htmlFor="amount" className="label">
-									Amount
+								<label htmlFor="name" className="label">
+									Name
 								</label>
 								<Field
-									id="amount"
-									name="amount"
-									className="input input-bordered"
-									type="number"
-								/>
-								<ErrorMessage
-									name="amount"
-									className="label text-sm text-red-500"
-									component={"div"}
-								/>
-							</div>
-
-							<div className="form-control">
-								<label htmlFor="category" className="label">
-									Category
-								</label>
-								<Field
-									id="category"
-									name="category"
-									className="input input-bordered"
-									as="select">
-									{userSetting.categories.map((cat, i) => (
-										<option key={i} value={cat}>
-											{cat}
-										</option>
-									))}
-								</Field>
-								<ErrorMessage
-									name="category"
-									className="label text-sm text-red-500"
-									component={"div"}
-								/>
-							</div>
-
-							<div className="form-control">
-								<label htmlFor="description" className="label">
-									Description
-								</label>
-								<Field
-									id="description"
-									name="description"
+									id="name"
+									name="name"
 									className="input input-bordered"
 								/>
 								<ErrorMessage
-									name="description"
+									name="name"
 									className="label text-sm text-red-500"
 									component={"div"}
 								/>
@@ -133,7 +120,7 @@ const SplitModal = ({ splitExpense }) => {
 								<button
 									type="submit"
 									className="btn btn-warning">
-									save edit
+									split
 								</button>
 							</div>
 						</Form>
