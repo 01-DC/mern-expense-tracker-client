@@ -53,6 +53,7 @@ const SplitModal = ({ splitExpense }) => {
 					) : (
 						<div />
 					)}
+					{/* Name Checker */}
 					<Formik
 						initialValues={{
 							name: "",
@@ -121,6 +122,79 @@ const SplitModal = ({ splitExpense }) => {
 									type="submit"
 									className="btn btn-warning">
 									split
+								</button>
+							</div>
+						</Form>
+					</Formik>
+					{/* Email Checker */}
+					<Formik
+						initialValues={{
+							email: "",
+						}}
+						enableReinitialize
+						validate={(values) => {
+							const errors = {}
+							if (!values.email) errors.email = "Required"
+
+							return errors
+						}}
+						onSubmit={async (values) => {
+							try {
+								await axios.post(
+									"/api/v1/expenses/split-expense",
+									{
+										expenseId: splitExpense._id,
+										payload: {
+											name: values.name,
+											email: values.email,
+											paid: false,
+										},
+									}
+								)
+								const newSplit = splitExpense.split.push({
+									name: values.name,
+									email: values.email,
+									paid: false,
+								})
+								setExpenses((prev) => {
+									return prev.map((exp) =>
+										exp._id === splitExpense._id
+											? {
+													...exp,
+													split: newSplit,
+											  }
+											: exp
+									)
+								})
+								showToastHandler("Expense split", "success")
+								modalRefSplit.current.checked = false
+							} catch (error) {
+								showToastHandler("Split failed", "error")
+								console.log(error)
+							}
+						}}>
+						<Form>
+							<div className="form-control">
+								<label htmlFor="email" className="label">
+									Email
+								</label>
+								<Field
+									id="email"
+									name="email"
+									className="input input-bordered"
+								/>
+								<ErrorMessage
+									name="email"
+									className="label text-sm text-red-500"
+									component={"div"}
+								/>
+							</div>
+
+							<div className="form-control mt-6">
+								<button
+									type="submit"
+									className="btn btn-warning">
+									check user & split
 								</button>
 							</div>
 						</Form>
