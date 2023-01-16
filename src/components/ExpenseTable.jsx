@@ -70,7 +70,10 @@ const ExpenseTable = () => {
 				</tbody>
 			</table>
 			<EditModal editableExpense={editableExpense} />
-			<SplitModal splitExpense={splitExpense} />
+			<SplitModal
+				splitExpense={splitExpense}
+				setSplitExpense={setSplitExpense}
+			/>
 		</div>
 	)
 }

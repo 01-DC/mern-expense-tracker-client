@@ -2,24 +2,11 @@ import React, { useRef } from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
+import SplitTable from "./SplitTable"
 
-const SplitTable = ({ split }) => {
-	return (
-		<tbody>
-			{split.map((sp, i) => (
-				<tr key={i}>
-					<td>{sp.name}</td>
-					<td>{sp.email}</td>
-					<td>{sp.paid ? "Paid" : "Unpaid"}</td>
-				</tr>
-			))}
-		</tbody>
-	)
-}
-
-const SplitModal = ({ splitExpense }) => {
+const SplitModal = ({ splitExpense, setSplitExpense }) => {
 	const modalRefSplit = useRef()
-	const { showToastHandler, setExpenses } = useStateContext()
+	const { loginUser, showToastHandler, setExpenses } = useStateContext()
 
 	return (
 		<div>
@@ -58,14 +45,13 @@ const SplitModal = ({ splitExpense }) => {
 						initialValues={{
 							name: "",
 						}}
-						enableReinitialize
 						validate={(values) => {
 							const errors = {}
 							if (!values.name) errors.name = "Required"
 
 							return errors
 						}}
-						onSubmit={async (values) => {
+						onSubmit={async (values, { resetForm }) => {
 							try {
 								await axios.post(
 									"/api/v1/expenses/split-expense",
@@ -78,26 +64,38 @@ const SplitModal = ({ splitExpense }) => {
 										},
 									}
 								)
-								const newSplit = splitExpense.split.push({
-									name: values.name,
-									email: "",
-									paid: false,
+								setSplitExpense((prev) => {
+									prev.split.push({
+										name: values.name,
+										email: "",
+										paid: false,
+									})
 								})
+
 								setExpenses((prev) => {
 									return prev.map((exp) =>
 										exp._id === splitExpense._id
 											? {
 													...exp,
-													split: newSplit,
+													split: [
+														...exp.split,
+														{
+															name: values.name,
+															email: "",
+															paid: false,
+														},
+													],
 											  }
 											: exp
 									)
 								})
 								showToastHandler("Expense split", "success")
+								resetForm()
 								modalRefSplit.current.checked = false
 							} catch (error) {
 								showToastHandler("Split failed", "error")
 								console.log(error)
+								resetForm()
 							}
 						}}>
 						<Form>
@@ -131,46 +129,84 @@ const SplitModal = ({ splitExpense }) => {
 						initialValues={{
 							email: "",
 						}}
-						enableReinitialize
 						validate={(values) => {
 							const errors = {}
 							if (!values.email) errors.email = "Required"
+							else if (values.email === loginUser.email)
+								errors.email = "Cannot split with yourself"
+							else {
+								if (
+									splitExpense.split.filter(
+										(spl) => spl.email === values.email
+									).length > 0
+								)
+									errors.email =
+										"Already split with this user"
+							}
 
 							return errors
 						}}
-						onSubmit={async (values) => {
+						onSubmit={async (values, { resetForm }) => {
 							try {
-								await axios.post(
-									"/api/v1/expenses/split-expense",
-									{
-										expenseId: splitExpense._id,
-										payload: {
-											name: values.name,
+								const res = await axios.post(
+									"/api/v1/users/find-user",
+									values
+								)
+								const { success } = res.data
+
+								if (success) {
+									const { user } = res.data
+
+									await axios.post(
+										"/api/v1/expenses/split-expense",
+										{
+											expenseId: splitExpense._id,
+											payload: {
+												name: user.name,
+												email: values.email,
+												paid: false,
+											},
+										}
+									)
+									setSplitExpense((prev) => {
+										prev.split.push({
+											name: user.name,
 											email: values.email,
 											paid: false,
-										},
-									}
-								)
-								const newSplit = splitExpense.split.push({
-									name: values.name,
-									email: values.email,
-									paid: false,
-								})
-								setExpenses((prev) => {
-									return prev.map((exp) =>
-										exp._id === splitExpense._id
-											? {
-													...exp,
-													split: newSplit,
-											  }
-											: exp
+										})
+									})
+
+									setExpenses((prev) => {
+										return prev.map((exp) =>
+											exp._id === splitExpense._id
+												? {
+														...exp,
+														split: [
+															...exp.split,
+															{
+																name: user.name,
+																email: values.email,
+																paid: false,
+															},
+														],
+												  }
+												: exp
+										)
+									})
+									showToastHandler("Expense split", "success")
+									resetForm()
+									modalRefSplit.current.checked = false
+								} else {
+									showToastHandler(
+										"User does not exist",
+										"error"
 									)
-								})
-								showToastHandler("Expense split", "success")
-								modalRefSplit.current.checked = false
+									resetForm()
+								}
 							} catch (error) {
 								showToastHandler("Split failed", "error")
 								console.log(error)
+								resetForm()
 							}
 						}}>
 						<Form>
