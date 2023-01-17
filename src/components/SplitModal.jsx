@@ -17,7 +17,7 @@ const SplitModal = ({ splitExpense, setSplitExpense }) => {
 				ref={modalRefSplit}
 			/>
 			<div className="modal">
-				<div className="modal-box">
+				<div className="modal-box max-w-2xl">
 					<label
 						htmlFor="my-modal-3"
 						className="btn btn-sm btn-circle absolute right-2 top-2">
@@ -34,7 +34,11 @@ const SplitModal = ({ splitExpense, setSplitExpense }) => {
 										<th>Status</th>
 									</tr>
 								</thead>
-								<SplitTable split={splitExpense.split} />
+								<SplitTable
+									setSplitExpense={setSplitExpense}
+									splitExpense={splitExpense}
+									modalRefSplit={modalRefSplit}
+								/>
 							</table>
 						</div>
 					) : (

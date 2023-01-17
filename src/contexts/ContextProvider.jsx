@@ -4,6 +4,7 @@ const StateContext = createContext()
 
 export const ContextProvider = ({ children }) => {
 	const [expenses, setExpenses] = useState([])
+	const [splitExpenses, setSplitExpenses] = useState([])
 	const [toast, setToast] = useState({
 		show: false,
 		desc: "",
@@ -41,6 +42,8 @@ export const ContextProvider = ({ children }) => {
 				setUserSetting,
 				toast,
 				showToastHandler,
+				splitExpenses,
+				setSplitExpenses,
 			}}>
 			{children}
 		</StateContext.Provider>

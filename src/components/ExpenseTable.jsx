@@ -5,7 +5,8 @@ import EditModal from "./EditModal"
 import SplitModal from "./SplitModal"
 
 const ExpenseTable = () => {
-	const { expenses, setExpenses, showToastHandler } = useStateContext()
+	const { expenses, setExpenses, showToastHandler, splitExpenses } =
+		useStateContext()
 	const [editableExpense, setEditableExpense] = useState("")
 	const [splitExpense, setSplitExpense] = useState("")
 
@@ -32,7 +33,6 @@ const ExpenseTable = () => {
 			<table className="table table-zebra w-full">
 				<thead>
 					<tr>
-						<th></th>
 						<th>Amount</th>
 						<th>Category</th>
 						<th>Description</th>
@@ -42,7 +42,6 @@ const ExpenseTable = () => {
 				<tbody>
 					{expenses?.map((exp, i) => (
 						<tr key={i}>
-							<th>{i + 1}</th>
 							<td>{exp.amount}</td>
 							<td>{exp.category}</td>
 							<td>{exp.description}</td>
@@ -64,6 +63,24 @@ const ExpenseTable = () => {
 									onClick={() => setEditableExpense(exp)}>
 									Edit
 								</label>
+							</td>
+						</tr>
+					))}
+					{splitExpenses?.map((exp, i) => (
+						<tr key={i}>
+							<td>{exp.amount}</td>
+							<td>{exp.category}</td>
+							<td>{exp.description}</td>
+							<td>
+								{exp.paid ? (
+									<div />
+								) : (
+									<button
+										className="btn btn-sm btn-info m-1"
+										onClick={{}}>
+										mark paid
+									</button>
+								)}
 							</td>
 						</tr>
 					))}

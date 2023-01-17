@@ -6,15 +6,22 @@ import { useStateContext } from "../contexts/ContextProvider"
 import axios from "axios"
 
 const HomePage = () => {
-	const { loginUser, setExpenses } = useStateContext()
+	const { loginUser, setExpenses, setSplitExpenses } = useStateContext()
 
 	const getAllExpenses = async () => {
 		try {
 			const userid = loginUser.email
-			const res = await axios.post("/api/v1/expenses/get-expense", {
+			const res1 = await axios.post("/api/v1/expenses/get-expense", {
 				userid,
 			})
-			setExpenses(res.data)
+			const res2 = await axios.post(
+				"/api/v1/expenses/get-split-expense",
+				{
+					userid,
+				}
+			)
+			setExpenses(res1.data)
+			setSplitExpenses(res2.data)
 			// console.log(res.data)
 		} catch (error) {
 			alert("Fetching expenses failed")
