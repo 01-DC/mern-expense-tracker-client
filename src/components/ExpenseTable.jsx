@@ -5,8 +5,14 @@ import EditModal from "./EditModal"
 import SplitModal from "./SplitModal"
 
 const ExpenseTable = () => {
-	const { expenses, setExpenses, showToastHandler, splitExpenses } =
-		useStateContext()
+	const {
+		loginUser,
+		expenses,
+		setExpenses,
+		showToastHandler,
+		splitExpenses,
+		setSplitExpenses,
+	} = useStateContext()
 	const [editableExpense, setEditableExpense] = useState("")
 	const [splitExpense, setSplitExpense] = useState("")
 
@@ -21,6 +27,39 @@ const ExpenseTable = () => {
 			showToastHandler("Expense Deleted", "success")
 		} catch (error) {
 			showToastHandler("Delete failed", "error")
+			console.log(error)
+		}
+	}
+
+	const statusToggleHandler = async (sp) => {
+		try {
+			const spl = sp.split.filter((e) => e.email === loginUser.email)[0]
+			await axios.post("/api/v1/expenses/toggle-split", {
+				splitId: spl._id,
+				status: !spl.paid,
+			})
+
+			setSplitExpenses((prev) => {
+				return prev.map((exp) =>
+					exp._id === sp._id
+						? {
+								...exp,
+								split: exp.split.map((s) =>
+									s._id === spl._id
+										? {
+												...s,
+												paid: !s.paid,
+										  }
+										: s
+								),
+						  }
+						: exp
+				)
+			})
+
+			showToastHandler("Toggle successful", "success")
+		} catch (error) {
+			showToastHandler("Toggle failed", "error")
 			console.log(error)
 		}
 	}
@@ -42,7 +81,13 @@ const ExpenseTable = () => {
 				<tbody>
 					{expenses?.map((exp, i) => (
 						<tr key={i}>
-							<td>{exp.amount}</td>
+							<td>
+								{exp.split.length > 0
+									? `${(
+											exp.amount / exp.split.length
+									  ).toFixed(2)} (${exp.amount})`
+									: `${exp.amount}`}
+							</td>
 							<td>{exp.category}</td>
 							<td>{exp.description}</td>
 							<td>
@@ -68,16 +113,24 @@ const ExpenseTable = () => {
 					))}
 					{splitExpenses?.map((exp, i) => (
 						<tr key={i}>
-							<td>{exp.amount}</td>
+							<td>
+								{`${(exp.amount / exp.split.length).toFixed(
+									2
+								)} (${exp.amount})`}
+							</td>
 							<td>{exp.category}</td>
 							<td>{exp.description}</td>
 							<td>
-								{exp.paid ? (
+								{exp.split.filter(
+									(e) => e.email === loginUser.email
+								)[0].paid ? (
 									<div />
 								) : (
 									<button
 										className="btn btn-sm btn-info m-1"
-										onClick={{}}>
+										onClick={() =>
+											statusToggleHandler(exp)
+										}>
 										mark paid
 									</button>
 								)}

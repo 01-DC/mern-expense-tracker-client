@@ -1,7 +1,6 @@
 import React from "react"
 import axios from "axios"
 import { useStateContext } from "../contexts/ContextProvider"
-import { useEffect } from "react"
 
 const SplitTable = ({ setSplitExpense, splitExpense, modalRefSplit }) => {
 	const { showToastHandler, setExpenses } = useStateContext()
@@ -39,10 +38,6 @@ const SplitTable = ({ setSplitExpense, splitExpense, modalRefSplit }) => {
 			console.log(error)
 		}
 	}
-
-	useEffect(() => {
-		console.log(splitExpense)
-	})
 
 	return (
 		<tbody>
